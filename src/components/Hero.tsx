@@ -18,7 +18,7 @@ const Hero = () => {
             <div className="w-40 h-40 mx-auto rounded-full bg-gradient-to-r from-neon-blue to-neon-purple p-1 animate-glow">
               <div className="w-full h-full rounded-full bg-background flex items-center justify-center">
                 <img 
-                  src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=300&h=300&fit=crop&crop=face" 
+                  src="/lovable-uploads/2aaf6d1d-36aa-4271-b936-9d1e6c7d5720.png" 
                   alt="Saran Lakshman MS" 
                   className="w-36 h-36 rounded-full object-cover"
                 />
