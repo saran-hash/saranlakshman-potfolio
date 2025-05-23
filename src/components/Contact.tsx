@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
+import emailjs from 'emailjs-com';
+import { toast } from "@/components/ui/sonner";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -12,11 +14,52 @@ const Contact = () => {
     subject: '',
     message: ''
   });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
+    
+    // Validate form
+    if (!formData.name || !formData.email || !formData.message) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
+    try {
+      // EmailJS configuration
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        subject: formData.subject,
+        message: formData.message
+      };
+      
+      await emailjs.send(
+        'service_0s57rle', 
+        'template_40f6xvl',
+        templateParams,
+        'kmQo5w3gh9q-mgGrM'
+      );
+      
+      // Show success message
+      toast.success("Message sent! Thank you for reaching out.");
+      
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        subject: '',
+        message: ''
+      });
+    } catch (error) {
+      console.error('Failed to send message:', error);
+      toast.error("Failed to send message. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -129,6 +172,7 @@ const Contact = () => {
                       onChange={handleChange}
                       className="bg-background/50 border-border focus:border-neon-blue"
                       placeholder="Your name"
+                      required
                     />
                   </div>
                   <div className="space-y-2">
@@ -140,6 +184,7 @@ const Contact = () => {
                       onChange={handleChange}
                       className="bg-background/50 border-border focus:border-neon-blue"
                       placeholder="your.email@example.com"
+                      required
                     />
                   </div>
                 </div>
@@ -163,14 +208,16 @@ const Contact = () => {
                     onChange={handleChange}
                     className="bg-background/50 border-border focus:border-neon-blue min-h-[120px]"
                     placeholder="Tell me about your project or idea..."
+                    required
                   />
                 </div>
                 
                 <Button 
                   type="submit" 
                   className="w-full bg-neon-purple hover:bg-neon-purple/80 text-background font-semibold py-3"
+                  disabled={isSubmitting}
                 >
-                  Send Message
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
                 </Button>
               </form>
             </CardContent>

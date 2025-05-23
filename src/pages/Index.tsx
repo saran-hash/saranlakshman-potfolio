@@ -1,4 +1,6 @@
 
+import { useEffect } from "react";
+import emailjs from 'emailjs-com';
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
@@ -8,6 +10,11 @@ import Portfolio from "@/components/Portfolio";
 import Contact from "@/components/Contact";
 
 const Index = () => {
+  useEffect(() => {
+    // Initialize EmailJS with your public key
+    emailjs.init("kmQo5w3gh9q-mgGrM");
+  }, []);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Navigation />
